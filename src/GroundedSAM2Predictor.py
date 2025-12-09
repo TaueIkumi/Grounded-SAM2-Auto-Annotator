@@ -40,8 +40,6 @@ class GroundedSAM2Predictor:
         all_confidences = []
         all_labels = []
 
-        print(f"Starting inference with batch size {batch_size}...")
-
         for batch_classes in self._chunk_list(classes, batch_size):
             batch_prompt = ". ".join(batch_classes) + "."
             

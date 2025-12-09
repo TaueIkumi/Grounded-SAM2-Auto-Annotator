@@ -153,7 +153,6 @@ class PascalVOCExporter(BaseExporter):
         xml_str = minidom.parseString(ET.tostring(annotation)).toprettyxml(indent="    ")
         with open(xml_path, "w") as f:
             f.write(xml_str)
-        print(f"[PascalVOC] Saved XML to {xml_path}")
 
     def _save_mask(self, result: Dict[str, Any], class_id_map: Dict[str, int], colormap: list):
         img_path = Path(result["image_path"])
@@ -182,4 +181,3 @@ class PascalVOCExporter(BaseExporter):
                 seg_map[mask.astype(bool)] = color_bgr
 
         cv2.imwrite(str(png_path), seg_map)
-        print(f"[PascalSeg] Saved Color Mask PNG to {png_path}")

@@ -1,4 +1,5 @@
 import argparse
+from tqdm import tqdm
 from pathlib import Path
 from . import exporters
 from .GroundedSAM2Predictor import GroundedSAM2Predictor as Predictor
@@ -34,8 +35,8 @@ VOC_COLORMAP = [entry[1] for entry in VOC_NAME_COLOR_PAIRS]
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--text-prompt', default=VOC_CLASSES)
-    parser.add_argument('--img-path', default="Grounded-SAM-2/notebooks/images/truck.jpg")
+    parser.add_argument('--img-path', default=None, help="Single image path")
+    parser.add_argument('--input-dir', default=None, help="Directory path containing images")
     parser.add_argument('--sam2-checkpoint', default="/home/appuser/Grounded-SAM-2/checkpoints/sam2.1_hiera_large.pt")
     parser.add_argument('--sam2-model-config', default="configs/sam2.1/sam2.1_hiera_l.yaml")
     parser.add_argument('--grounding-dino-config', default="/home/appuser/Grounded-SAM-2/grounding_dino/groundingdino/config/GroundingDINO_SwinT_OGC.py")
@@ -55,6 +56,16 @@ def main():
     args.output_dir = Path(args.output_dir)
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
+    image_files = []
+    if args.input_dir:
+        input_path = Path(args.input_dir)
+        for ext in ['*.jpg', '*.jpeg', '*.png', '*.bmp']:
+            image_files.extend(input_path.glob(ext))
+    elif args.img_path:
+        image_files.append(Path(args.img_path))
+    else:
+        raise ValueError("Either --input-dir or --img-path must be specified.")
+    
     predictor = Predictor(
         sam2_model_config=args.sam2_model_config,
         sam2_checkpoint=args.sam2_checkpoint,
@@ -65,22 +76,24 @@ def main():
         text_threshold=args.text_threshold
     )
 
-    result = predictor.predict(
-        image_path=args.img_path,
-        classes=args.text_prompt,
-        batch_size=args.batch_size,
-        multimask_output=args.multimask_output
-    )
+    exporter = exporters.PascalVOCExporter(output_dir=str(args.output_dir))
 
-    print(f"final labels: {result['labels']}")
-
-    exporter = exporters.PascalVOCExporter(
-        output_dir=str(args.output_dir)
-    )
-    if args.pascal_task == 'detection':
-        exporter.save(result, class_id_map=VOC_ID_MAP, task='detection')
-        
-    elif args.pascal_task == 'segmentation':
-        exporter.save(result, class_id_map=VOC_ID_MAP, colormap=VOC_COLORMAP, task='segmentation')
+    for img_file in tqdm(image_files):
+        try:
+            result = predictor.predict(
+                image_path=str(img_file),
+                classes=VOC_CLASSES,
+                batch_size=args.batch_size,
+                multimask_output=args.multimask_output
+            )
+            if args.pascal_task == 'detection':
+                exporter.save(result, class_id_map=VOC_ID_MAP, task='detection')
+                
+            elif args.pascal_task == 'segmentation':
+                exporter.save(result, class_id_map=VOC_ID_MAP, colormap=VOC_COLORMAP, task='segmentation')
+                
+        except Exception as e:
+            print(f"\nError processing {img_file.name}: {e}")
+            continue
 if __name__ == "__main__":
     main()

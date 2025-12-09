@@ -1,4 +1,5 @@
 import argparse
+from tqdm import tqdm
 from pathlib import Path
 from . import exporters
 from .GroundedSAM2Predictor import GroundedSAM2Predictor as Predictor
@@ -90,7 +91,8 @@ COCO_ID_MAP = {name: i for i, name in enumerate(COCO_CLASSES)}
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--img-path', default="Grounded-SAM-2/notebooks/images/truck.jpg")
+    parser.add_argument('--img-path', default=None, help="Single image path")
+    parser.add_argument('--input-dir', default=None, help="Directory path containing images")
     parser.add_argument('--sam2-checkpoint', default="/home/appuser/Grounded-SAM-2/checkpoints/sam2.1_hiera_large.pt")
     parser.add_argument('--sam2-model-config', default="configs/sam2.1/sam2.1_hiera_l.yaml")
     parser.add_argument('--grounding-dino-config', default="/home/appuser/Grounded-SAM-2/grounding_dino/groundingdino/config/GroundingDINO_SwinT_OGC.py")
@@ -109,6 +111,17 @@ def main():
     args.output_dir = Path(args.output_dir)
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
+    image_files = []
+    if args.input_dir:
+        input_path = Path(args.input_dir)
+        for ext in ['*.jpg', '*.jpeg', '*.png', '*.bmp']:
+            image_files.extend(input_path.glob(ext))
+    elif args.img_path:
+        image_files.append(Path(args.img_path))
+    else:
+        raise ValueError("Either --input-dir or --img-path must be specified.")
+    
+
     predictor = Predictor(
         sam2_model_config=args.sam2_model_config,
         sam2_checkpoint=args.sam2_checkpoint,
@@ -119,22 +132,30 @@ def main():
         text_threshold=args.text_threshold
     )
 
-    result = predictor.predict(
-        image_path=args.img_path,
-        classes=COCO_CLASSES,
-        batch_size=args.batch_size,
-        multimask_output=args.multimask_output
-    )
 
     json_path = args.output_dir / "annotations.json"
-    print(f"final labels: {result['labels']}")
 
     exporter = exporters.COCOExporter(
         categories=COCO_CLASSES,
         output_path=str(json_path)
     )
 
-    exporter.add(result, task=args.coco_task)
+    print("Processing images...")
+
+    for img_file in tqdm(image_files):
+        try:
+            result = predictor.predict(
+                image_path=str(img_file),
+                classes=COCO_CLASSES,
+                batch_size=args.batch_size,
+                multimask_output=args.multimask_output
+            )
+
+            exporter.add(result, task=args.coco_task)
+            
+        except Exception as e:
+            print(f"Error processing {img_file.name}: {e}")
+            continue 
     exporter.save()
 if __name__ == "__main__":
     main()
