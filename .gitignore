@@ -213,3 +213,6 @@ LSMI-**
 
 # results
 outputs/
+
+# ruff
+.ruff_cache/

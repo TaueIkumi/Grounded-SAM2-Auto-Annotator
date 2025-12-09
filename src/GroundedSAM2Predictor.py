@@ -6,6 +6,7 @@ from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
 from grounding_dino.groundingdino.util.inference import load_model, load_image, predict
 
+
 class GroundedSAM2Predictor:
     def __init__(self, sam2_model_config: str, sam2_checkpoint: str,
                  grounding_dino_config: str, grounding_dino_checkpoint: str,

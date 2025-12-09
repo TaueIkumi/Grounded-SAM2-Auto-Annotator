@@ -3,7 +3,6 @@ from pathlib import Path
 from . import exporters
 from .GroundedSAM2Predictor import GroundedSAM2Predictor as Predictor
 
-# [クラス名, [R, G, B]] の2次元配列リスト
 VOC_NAME_COLOR_PAIRS = [
     ["background",  [0, 0, 0]],       # ID: 0
     ["aeroplane",   [128, 0, 0]],     # ID: 1
@@ -44,10 +43,12 @@ def main():
     parser.add_argument('--box-threshold', type=float, default=0.35)
     parser.add_argument('--text-threshold', type=float, default=0.35)
     parser.add_argument('--device', default="cuda")
-    parser.add_argument('--output-dir', default="outputs/grounded_sam2_local_demo")
+    parser.add_argument('--output-dir', default="outputs/pascal")
     parser.add_argument('--dump-json-results', action="store_true")
     parser.add_argument('--multimask-output', action="store_true")
     parser.add_argument('--batch-size', type=int, default=1)
+
+    parser.add_argument('--pascal-task', choices=['detection', 'segmentation'], default='detection')
 
     args = parser.parse_args()
 
@@ -73,7 +74,13 @@ def main():
 
     print(f"final labels: {result['labels']}")
 
-    exporter = exporters.PascalVOCSegExporter(output_dir=str(args.output_dir))
-    exporter.save(result, class_id_map=VOC_ID_MAP, colormap=VOC_COLORMAP)
+    exporter = exporters.PascalVOCExporter(
+        output_dir=str(args.output_dir)
+    )
+    if args.pascal_task == 'detection':
+        exporter.save(result, class_id_map=VOC_ID_MAP, task='detection')
+        
+    elif args.pascal_task == 'segmentation':
+        exporter.save(result, class_id_map=VOC_ID_MAP, colormap=VOC_COLORMAP, task='segmentation')
 if __name__ == "__main__":
     main()
