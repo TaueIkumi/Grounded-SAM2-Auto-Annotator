@@ -1,0 +1,43 @@
+colors:
+  - name: background
+    rgb: [0, 0, 0]       # ID: 0
+  - name: aeroplane
+    rgb: [128, 0, 0]     # ID: 1
+  - name: bicycle
+    rgb: [0, 128, 0]     # ID: 2
+  - name: bird
+    rgb: [128, 128, 0]   # ID: 3
+  - name: boat
+    rgb: [0, 0, 128]     # ID: 4
+  - name: bottle
+    rgb: [128, 0, 128]   # ID: 5
+  - name: bus
+    rgb: [0, 128, 128]   # ID: 6
+  - name: car
+    rgb: [128, 128, 128] # ID: 7
+  - name: cat
+    rgb: [64, 0, 0]      # ID: 8
+  - name: chair
+    rgb: [192, 0, 0]     # ID: 9
+  - name: cow
+    rgb: [64, 128, 0]    # ID: 10
+  - name: diningtable
+    rgb: [192, 128, 0]   # ID: 11
+  - name: dog
+    rgb: [64, 0, 128]    # ID: 12
+  - name: horse
+    rgb: [192, 0, 128]   # ID: 13
+  - name: motorbike
+    rgb: [64, 128, 128]  # ID: 14
+  - name: person
+    rgb: [192, 128, 128] # ID: 15
+  - name: pottedplant
+    rgb: [0, 64, 0]      # ID: 16
+  - name: sheep
+    rgb: [128, 64, 0]    # ID: 17
+  - name: sofa
+    rgb: [0, 192, 0]     # ID: 18
+  - name: train
+    rgb: [128, 192, 0]   # ID: 19
+  - name: tvmonitor
+    rgb: [0, 64, 128]    # ID: 20
