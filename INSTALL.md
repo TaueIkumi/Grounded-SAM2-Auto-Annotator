@@ -53,10 +53,17 @@ Get-ChildItem -Path ".\LSMI-dataset" -Recurse -Include *.jpg,*.jpeg |
 
 
 ## issues
-```bash
-UserWarning: Failed to load custom C++ ops. Running on CPU mode Only!
-```
+###  UserWarning: Failed to load custom C++ ops. Running on CPU mode Only!
 とエラーが出る場合はDocker run後に以下コマンドを入力すると修正可能([github-issue](https://github.com/IDEA-Research/Grounded-SAM-2/issues/56#issuecomment-2471647093))
 ```bash
 pip install --no-build-isolation -e Grounded-SAM-2/grounding_dino
 ```
+
+### ModuleNotFoundError: No module named 'grounding_dino'
+スクリプト実行時に `grounding_dino` が見つからないというエラーが出る場合は、`PYTHONPATH` を設定する必要があります。
+これは Grounded-SAM-2 内部のコードが、特定のディレクトリ構造（フォルダ名を含む絶対/相対インポート）に依存しているためです。
+
+Dockerコンテナ内で以下を実行してパスを通してください：
+
+```bash
+export PYTHONPATH=$PYTHONPATH:/home/appuser/workspace/Grounded-SAM-2

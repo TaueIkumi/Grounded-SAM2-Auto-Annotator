@@ -4,7 +4,7 @@ from typing import List, Dict, Any
 from torchvision.ops import box_convert, nms
 from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
-from grounding_dino.groundingdino.util.inference import load_model, load_image, predict
+from groundingdino.util.inference import load_model, load_image, predict
 
 
 class GroundedSAM2Predictor:
