@@ -22,8 +22,8 @@ Grounded SAM 2 は、以下の2つの強力なモデルをパイプラインと�
 - [x] Coco seg
 - [x] Pascal VOC bbox
 - [x] Pascal VOC seg
-- [ ] YOLO bbox
-- [ ] YOLO seg
+- [x] YOLO bbox
+- [x] YOLO seg
 
 ## 環境構築
 [INSTALL.md](#INSTALL.md)を参照
