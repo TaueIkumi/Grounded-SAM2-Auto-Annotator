@@ -30,27 +30,6 @@ python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_
 ```
 `>> True NVIDIA GeForce RTX ****`のように出力されればGPUが使用可能
 
-### Dataset
-データセットには[LSMI_dataset](https://github.com/DY112/LSMI-dataset)を用いる。\
-githubからもダウンロードできるが、google formなどにメールアドレスなどを入力しないといけないので面倒 \
-NASの`data\prj_illuminant_color_estimation\LSMI-dataset`に配置されている(2025/12/06時点では) \
-NAS上のデータセットを利用するにはシンボリックリンクとして指定するのが推奨 \
-管理者権限でpowershellやvscodeを起動する必要がある \
-```bash
-# コマンド例(NASの実際のアドレスを記入する必要がある)
-New-Item -ItemType SymbolicLink -Path ".\LSMI-dataset" -Value "\path\to\NAS"
-```
-
-LSMIデータセット内のjpgをまとめる
-```bash
-# 1. コピー先ディレクトリを作成 (存在しなければ作成)
-New-Item -ItemType Directory -Path ".\LSMI-images" -Force | Out-Null
-
-# 2. サブディレクトリを再帰的に検索し、ファイル名でフィルタリングしてコピーを実行
-Get-ChildItem -Path ".\LSMI-dataset" -Recurse -Include *.jpg,*.jpeg | 
-    Copy-Item -Destination ".\LSMI-images"
-```
-
 
 ## issues
 ###  UserWarning: Failed to load custom C++ ops. Running on CPU mode Only!
@@ -67,3 +46,4 @@ Dockerコンテナ内で以下を実行してパスを通してください：
 
 ```bash
 export PYTHONPATH=$PYTHONPATH:/home/appuser/workspace/Grounded-SAM-2
+```
