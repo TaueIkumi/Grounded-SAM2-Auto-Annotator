@@ -3,9 +3,9 @@
 **[Grounded-SAM-2](https://github.com/IDEA-Research/Grounded-SAM-2/tree/main)**
 
 ## 概要
-本プロジェクトは、**Grounded-SAM-2 (GSAM2)** を用いて、LSMI Dataset（または任意の画像データ）に対してテキストプロンプトによる自動アノテーションを行うツールです。
+本プロジェクトは、**Grounded-SAM-2 (GSAM2)** を用いて、任意の画像データに対してテキストプロンプトによる自動アノテーションを行うツールです。
 
-事前に定義されたクラス名（Pascal VOC 20クラスなど）をテキストプロンプトとして入力し、物体検出からセグメンテーションマスクの生成までを自動化しています。
+事前に定義されたクラス名をテキストプロンプトとして入力し、物体検出からセグメンテーションマスクの生成までを自動化しています。
 
 ## Grounded SAM 2 とは
 Grounded SAM 2 は、以下の2つの強力なモデルをパイプラインとして組み合わせたシステムです。
@@ -22,8 +22,6 @@ Grounded SAM 2 は、以下の2つの強力なモデルをパイプラインと�
 - [x] Coco seg
 - [x] Pascal VOC bbox
 - [x] Pascal VOC seg
-- [x] YOLO bbox
-- [x] YOLO seg
 
 ## 環境構築
 [INSTALL.md](#INSTALL.md)を参照
