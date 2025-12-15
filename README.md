@@ -1,27 +1,29 @@
-# Grounded SAM 2を用いたラベリング
+[**🇯🇵 Japanese**](README.ja.md)
+
+# Automated Labeling with Grounded SAM 2
 
 **[Grounded-SAM-2](https://github.com/IDEA-Research/Grounded-SAM-2/tree/main)**
 
-## 概要
-本プロジェクトは、**Grounded-SAM-2 (GSAM2)** を用いて、任意の画像データに対してテキストプロンプトによる自動アノテーションを行うツールです。
+## Overview
+This project is a tool for automated annotation on arbitrary images using **Grounded-SAM-2 (GSAM2)** with text prompts.
 
-事前に定義されたクラス名をテキストプロンプトとして入力し、物体検出からセグメンテーションマスクの生成までを自動化しています。
+By inputting predefined class names as text prompts, it automatically generates both **bounding boxes** and **segmentation masks**.
 
-## Grounded SAM 2 とは
-Grounded SAM 2 は、以下の2つの強力なモデルをパイプラインとして組み合わせたシステムです。
+## What is Grounded SAM 2?
+Grounded SAM 2 is a system that combines the following two powerful models into a pipeline:
 
-1.  **Grounding DINO (Open-Set Object Detection)**
-    * 任意のテキスト（"car", "person"など）を入力として受け取り、画像内の該当する物体を**バウンディングボックス（矩形）**で検出します。
-2.  **SAM 2 (Segment Anything Model 2)**
-    * Grounding DINOが出力したバウンディングボックスをプロンプト（ヒント）として受け取り、その内部の物体を**ピクセル単位のマスク**として高精度に切り抜きます。
+1. **Grounding DINO (Open-Set Object Detection)**
+   * Accepts arbitrary text inputs (e.g., "car", "person") and detects corresponding objects in the image with **bounding boxes**.
+2. **SAM 2 (Segment Anything Model 2)**
+   * Accepts the bounding boxes output by Grounding DINO as prompts (hints) and precisely segments the objects within them as **pixel-level masks**.
 
-これにより、「言葉で指示するだけ」で、対象物体の正確なセグメンテーションデータの作成が可能になります。
+This enables the creation of accurate segmentation data simply by "instructing via text."
 
-## 対応データセット
-- [x] Coco bbox
-- [x] Coco seg
+## Supported Datasets
+- [x] COCO bbox
+- [x] COCO seg
 - [x] Pascal VOC bbox
 - [x] Pascal VOC seg
 
-## 環境構築
-[INSTALL.md](#INSTALL.md)を参照
+## Installation
+Please refer to [INSTALL.md](INSTALL.md).

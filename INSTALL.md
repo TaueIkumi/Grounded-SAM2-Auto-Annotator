@@ -1,11 +1,12 @@
 
-## 環境構築
+## Installation
 ```bash
 git clone https://github.com/IDEA-Research/Grounded-SAM-2.git
 ```
-Grounded-SAM-2のモデルのダウンロードなどは上記リポジトリのREADME.mdを参照してください
+For model downloads and other details regarding Grounded-SAM-2, please refer to the [README.md](README.md).
+
 ### Docker
-build
+Build
 ```bash
 cd Grounded-SAM-2
 docker build -t gsam2-base -f Dockerfile .
@@ -13,7 +14,7 @@ cd ..
 
 docker build -t custom .
 ```
-run
+Run
 ```
 docker run --gpus all -it --rm --net=host --privileged `
   --shm-size=8g `
@@ -22,27 +23,27 @@ docker run --gpus all -it --rm --net=host --privileged `
   -w /home/appuser/workspace `
   custom
 ```
-Docker環境から抜け出す場合は```exit```と入力する
+To exit the Docker environment, type `exit`.
 
-GPUが使用できるかを確認
+Verify GPU Availability
 ```bash
 python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'No GPU')"
 ```
-`>> True NVIDIA GeForce RTX ****`のように出力されればGPUが使用可能
+If the output looks like `>> True NVIDIA GeForce RTX ****, `the GPU is ready to use.
 
 
-## issues
-###  UserWarning: Failed to load custom C++ ops. Running on CPU mode Only!
-とエラーが出る場合はDocker run後に以下コマンドを入力すると修正可能([github-issue](https://github.com/IDEA-Research/Grounded-SAM-2/issues/56#issuecomment-2471647093))
+## Troubleshooting
+UserWarning: **Failed to load custom C++ ops. Running on CPU mode Only!** \
+If you encounter this error, you can fix it by running the following command after starting the Docker container (Reference: [github-issue](https://github.com/IDEA-Research/Grounded-SAM-2/issues/56#issuecomment-2471647093))
+
 ```bash
 pip install --no-build-isolation -e Grounded-SAM-2/grounding_dino
 ```
 
-### ModuleNotFoundError: No module named 'grounding_dino'
-スクリプト実行時に `grounding_dino` が見つからないというエラーが出る場合は、`PYTHONPATH` を設定する必要があります。
-これは Grounded-SAM-2 内部のコードが、特定のディレクトリ構造（フォルダ名を含む絶対/相対インポート）に依存しているためです。
+**ModuleNotFoundError: No module named 'grounding_dino'** \
+If you receive an error stating that grounding_dino cannot be found when running the script, you need to set the PYTHONPATH. This is required because the internal code of Grounded-SAM-2 relies on a specific directory structure (involving absolute/relative imports with folder names).
 
-Dockerコンテナ内で以下を実行してパスを通してください：
+Execute the following command inside the Docker container to set the path:
 
 ```bash
 export PYTHONPATH=$PYTHONPATH:/home/appuser/workspace/Grounded-SAM-2
