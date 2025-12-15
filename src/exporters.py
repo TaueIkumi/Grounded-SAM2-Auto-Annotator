@@ -11,8 +11,8 @@ from xml.dom import minidom
 class BaseExporter:
     def __init__(self, output_dir: str):
         self.output_dir = Path(output_dir)
-        self.output_dir.mkdir(parents=True, exist_ok=True)    
-    
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+
 class COCOExporter:
     def __init__(self, categories: List[str], output_path: str):
         self.output_path = Path(output_path)
@@ -100,16 +100,7 @@ class COCOExporter:
         with open(self.output_path, "w") as f:
             json.dump(self.coco_format, f, indent=4)
         print(f"[COCO] Saved annotations to {self.output_path}")
-
 class PascalVOCExporter(BaseExporter):
-    def __init__(self, output_dir: str):
-        super().__init__(output_dir)
-        self.xml_dir = self.output_dir / "Annotations"
-        self.xml_dir.mkdir(parents=True, exist_ok=True)
-
-        self.seg_dir = self.output_dir / "SegmentationClass"
-        self.seg_dir.mkdir(parents=True, exist_ok=True)
-
     def save(self, result: Dict[str, Any], class_id_map: Dict[str, int], colormap: list = None, task: str = "detection"):
         if task == "detection":
             self._save_xml(result, class_id_map)
@@ -122,7 +113,7 @@ class PascalVOCExporter(BaseExporter):
 
     def _save_xml(self, result: Dict[str, Any], class_id_map: Dict[str, int]):
         img_path = Path(result["image_path"])
-        xml_path = self.xml_dir / f"{img_path.stem}.xml"
+        xml_path = self.output_dir / f"{img_path.stem}.xml"
         height, width = result["image_shape"]
 
         annotation = ET.Element('annotation')
@@ -165,7 +156,7 @@ class PascalVOCExporter(BaseExporter):
 
     def _save_mask(self, result: Dict[str, Any], class_id_map: Dict[str, int], colormap: list):
         img_path = Path(result["image_path"])
-        png_path = self.seg_dir / f"{img_path.stem}.png"
+        png_path = self.output_dir / f"{img_path.stem}.png"
         
         height, width = result["image_shape"]
         seg_map = np.zeros((height, width, 3), dtype=np.uint8)

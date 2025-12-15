@@ -7,6 +7,7 @@ from .GroundedSAM2Predictor import GroundedSAM2Predictor as Predictor
 
 def get_parser():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--img-path', default=None, help="Single image path")
     parser.add_argument('--input-dir', default=None, help="Directory path containing images")
     parser.add_argument('--sam2-checkpoint', default="Grounded-SAM-2/checkpoints/sam2.1_hiera_large.pt")
     parser.add_argument('--sam2-model-config', default="configs/sam2.1/sam2.1_hiera_l.yaml")
@@ -21,7 +22,7 @@ def get_parser():
     parser.add_argument('--batch-size', type=int, default=1)
 
     parser.add_argument('--coco-config', type=str, default="configs/coco.yaml")
-    parser.add_argument('--segmentation', action='store_true', help="Enable segmentation output for COCO format.")
+    parser.add_argument('--coco-task', choices=['detection', 'segmentation'], default='detection')
     
     return parser
 
@@ -30,9 +31,8 @@ def run_inference(args):
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
     image_files = []
-
     if args.input_dir:
-        input_path = Path(args.input_dir) / "images"
+        input_path = Path(args.input_dir)
         for ext in ['*.jpg', '*.jpeg', '*.png', '*.bmp']:
             image_files.extend(input_path.glob(ext))
     elif args.img_path:
@@ -70,7 +70,7 @@ def run_inference(args):
     )
 
 
-    json_path = args.output_dir / "instances.json"
+    json_path = args.output_dir / "annotations.json"
 
     exporter = exporters.COCOExporter(
         categories=COCO_CLASSES,
@@ -88,9 +88,7 @@ def run_inference(args):
                 multimask_output=args.multimask_output
             )
 
-            exporter.add(result, task='detection')
-            if args.segmentation:
-                exporter.add(result, task='segmentation')
+            exporter.add(result, task=args.coco_task)
             
         except Exception as e:
             print(f"Error processing {img_file.name}: {e}")
