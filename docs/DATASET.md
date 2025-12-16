@@ -14,10 +14,16 @@ EXAMPLE_DIR/
 │   ├── image01.xml
 │   ├── image02.xml
 │   └── ...
-└── SegmentationClass/ <-- Auto-generated
-    ├── image01.png
-    ├── image02.png
-    └── ...
+├── SegmentationClass/ <-- Auto-generated (created only with --segmentation)
+│   ├── image01.png
+│   ├── image02.png
+│   └── ...
+└── ImagesSets/ <-- Auto-generated
+    ├── Main
+    │   └── default.txt
+    └── Segmentation        <-- Created only with --segmentation
+        └── default.txt
+
 ```
 
 ### MS COCO

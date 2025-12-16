@@ -15,7 +15,6 @@ def get_parser():
     parser.add_argument('--box-threshold', type=float, default=0.35)
     parser.add_argument('--text-threshold', type=float, default=0.35)
     parser.add_argument('--device', default="cuda")
-    parser.add_argument('--output-dir', default="outputs/coco")
     parser.add_argument('--dump-json-results', action="store_true")
     parser.add_argument('--multimask-output', action="store_true")
     parser.add_argument('--batch-size', type=int, default=1)
