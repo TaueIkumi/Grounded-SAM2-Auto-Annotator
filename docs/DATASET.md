@@ -1,6 +1,6 @@
 # DATASET FORMAT
 
-### PASCAL VOC
+## PASCAL VOC
 The directory structure allows for automatic annotation generation.  \
 **Placing arbitrary images in the `JPEGImages` directory will automatically generate the `Annotations` and `SegmentationClass` directories.**
 
@@ -18,17 +18,44 @@ EXAMPLE_DIR/
 │   ├── image01.png
 │   ├── image02.png
 │   └── ...
-└── ImagesSets/ <-- Auto-generated
-    ├── Main
-    │   └── default.txt
-    └── Segmentation        <-- Created only with --segmentation
-        └── default.txt
-
+├── ImagesSets/ <-- Auto-generated
+│   ├── Main
+│   │   └── default.txt
+│   └── Segmentation        <-- Created only with --segmentation
+│       └── default.txt
+└── labelmap.txt    <-- Required when annotating with CVAT
 ```
 
-### MS COCO
+#### labelmap.txt (example)
+```txt
+# label:color_rgb:parts:actions
+background:0,0,0::
+aeroplane:128,0,0::
+bicycle:0,128,0::
+bird:128,128,0::
+boat:0,0,128::
+bottle:128,0,128::
+bus:0,128,128::
+car:128,128,128::
+cat:64,0,0::
+chair:192,0,0::
+cow:64,128,0::
+diningtable:192,128,0::
+dog:64,0,128::
+horse:192,0,128::
+motorbike:64,128,128::
+person:192,128,128::
+pottedplant:0,64,0::
+sheep:128,64,0::
+sofa:0,192,0::
+train:128,192,0::
+tvmonitor:0,64,128::
+ignored:224,224,192::
+```
+
+## MS COCO
 The directory structure allows for automatic annotation generation.  
-**Placing arbitrary images in the `Input Directory` will automatically generate a single `annotations.json` file containing all annotations.**
+**Placing arbitrary images in the `EXAMPLE_DIR` will automatically generate a single `annotations.json` file containing all annotations.**
 
 ```text
 EXAMPLE_DIR/
