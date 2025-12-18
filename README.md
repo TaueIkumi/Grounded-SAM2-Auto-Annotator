@@ -26,4 +26,4 @@ This enables the creation of accurate segmentation data simply by "instructing v
 - [x] Pascal VOC seg
 
 ## Installation
-Please refer to [INSTALL.md](INSTALL.md).
+Please refer to [INSTALL.md](docs/INSTALL.md).
