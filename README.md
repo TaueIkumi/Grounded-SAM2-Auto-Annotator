@@ -1,4 +1,4 @@
-[**🇯🇵 Japanese**](README.ja.md)
+[**🇯🇵 Japanese**](docs/README.ja.md)
 
 # Automated Labeling with Grounded SAM 2
 
@@ -7,11 +7,7 @@
 ## Overview
 This project is a tool for automated annotation on arbitrary images using **Grounded-SAM-2 (GSAM2)** with text prompts.
 
-<<<<<<< HEAD
-By inputting predefined class names as text prompts, it automates the process from object detection to segmentation mask generation.
-=======
 By inputting predefined class names as text prompts, it automatically generates both **bounding boxes** and **segmentation masks**.
->>>>>>> origin/main
 
 ## What is Grounded SAM 2?
 Grounded SAM 2 is a system that combines the following two powerful models into a pipeline:

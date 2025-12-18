@@ -24,4 +24,4 @@ Grounded SAM 2 は、以下の2つの強力なモデルをパイプラインと�
 - [x] Pascal VOC seg
 
 ## 環境構築
-[INSTALL.md](#INSTALL.md)を参照
+[INSTALL.md](#INSTALL.ja.md)を参照
