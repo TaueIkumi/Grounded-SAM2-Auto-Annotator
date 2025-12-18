@@ -9,9 +9,9 @@ import xml.etree.ElementTree as ET
 from xml.dom import minidom
 
 class BaseExporter:
-    def __init__(self, output_dir: str):
-        self.output_dir = Path(output_dir)
-        self.output_dir.mkdir(parents=True, exist_ok=True)    
+    def __init__(self, input_dir: str):
+        self.input_dir = Path(input_dir)
+        self.input_dir.mkdir(parents=True, exist_ok=True)    
     
 class COCOExporter:
     def __init__(self, categories: List[str], output_path: str):
@@ -102,13 +102,32 @@ class COCOExporter:
         print(f"[COCO] Saved annotations to {self.output_path}")
 
 class PascalVOCExporter(BaseExporter):
-    def __init__(self, output_dir: str):
-        super().__init__(output_dir)
-        self.xml_dir = self.output_dir / "Annotations"
+    def __init__(self, input_dir: str):
+        super().__init__(input_dir)
+        self.xml_dir = self.input_dir / "Annotations"
         self.xml_dir.mkdir(parents=True, exist_ok=True)
 
-        self.seg_dir = self.output_dir / "SegmentationClass"
+        self.seg_dir = self.input_dir / "SegmentationClass"
         self.seg_dir.mkdir(parents=True, exist_ok=True)
+
+        self.imagesets_dir = self.input_dir / "ImageSets" / "Main"
+        self.imagesets_dir.mkdir(parents=True, exist_ok=True)
+
+        self.segmentation_dir = self.input_dir / "ImageSets" / "Segmentation"
+        self.segmentation_dir.mkdir(parents=True, exist_ok=True)
+
+        self.list_file = self.imagesets_dir / "default.txt"
+        with open(self.list_file, "w") as f:
+            pass
+
+        self.segmentation_list_file = self.segmentation_dir / "default.txt"
+
+        with open(self.segmentation_list_file, "w") as f:
+            
+            pass
+
+        self.processed_files = set()
+        self.processed_seg_files = set()
 
     def save(self, result: Dict[str, Any], class_id_map: Dict[str, int], colormap: list = None, task: str = "detection"):
         if task == "detection":
@@ -162,6 +181,11 @@ class PascalVOCExporter(BaseExporter):
         xml_str = minidom.parseString(ET.tostring(annotation)).toprettyxml(indent="    ")
         with open(xml_path, "w") as f:
             f.write(xml_str)
+        
+        if img_path.stem not in self.processed_files:
+            with open(self.list_file, "a") as f:
+                f.write(f"{img_path.stem}\n")
+            self.processed_files.add(img_path.stem)
 
     def _save_mask(self, result: Dict[str, Any], class_id_map: Dict[str, int], colormap: list):
         img_path = Path(result["image_path"])
@@ -190,3 +214,7 @@ class PascalVOCExporter(BaseExporter):
                 seg_map[mask.astype(bool)] = color_bgr
 
         cv2.imwrite(str(png_path), seg_map)
+        if img_path.stem not in self.processed_seg_files:
+            with open(self.segmentation_list_file, "a") as f:
+                f.write(f"{img_path.stem}\n")
+            self.processed_seg_files.add(img_path.stem)

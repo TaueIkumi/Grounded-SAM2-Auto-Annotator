@@ -15,7 +15,6 @@ def get_parser():
     parser.add_argument('--box-threshold', type=float, default=0.5)
     parser.add_argument('--text-threshold', type=float, default=0.35)
     parser.add_argument('--device', default="cuda")
-    parser.add_argument('--output-dir', default="outputs/VOC")
     parser.add_argument('--dump-json-results', action="store_true")
     parser.add_argument('--multimask-output', action="store_true")
     parser.add_argument('--batch-size', type=int, default=1)
@@ -38,13 +37,10 @@ def run_inference(args):
 
     print("Preparing image files...")
     print(f"classes: {VOC_CLASSES}")
-    
-    args.output_dir = Path(args.output_dir)
-    args.output_dir.mkdir(parents=True, exist_ok=True)
 
     image_files = []
     if args.input_dir:
-        input_path = Path(args.input_dir)
+        input_path = Path(args.input_dir) / "JPEGImages"
         for ext in ['*.jpg', '*.jpeg', '*.png', '*.bmp']:
             image_files.extend(input_path.glob(ext))
     elif args.img_path:
@@ -62,7 +58,7 @@ def run_inference(args):
         text_threshold=args.text_threshold
     )
 
-    exporter = exporters.PascalVOCExporter(output_dir=str(args.output_dir))
+    exporter = exporters.PascalVOCExporter(input_dir=str(args.input_dir))
 
     for img_file in tqdm(image_files):
         try:
@@ -80,7 +76,7 @@ def run_inference(args):
         except Exception as e:
             print(f"\nError processing {img_file.name}: {e}")
             continue
-    print(f"Pascal VOC annotations saved to {args.output_dir}")
+    print(f"Pascal VOC annotations saved to {args.input_dir}")
 
 def main():
     parser = get_parser()

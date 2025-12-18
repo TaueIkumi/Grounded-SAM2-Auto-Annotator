@@ -14,7 +14,7 @@ class Visulizer:
         
         self.current_images_dir: Optional[Path] = None
     
-    def load_dataset(self, format: str, task, yolo_data_yaml: Optional[str] = None) -> supervision.DetectionDataset:
+    def load_dataset(self, format: str, task) -> supervision.DetectionDataset:
         print(f"Loading dataset in {format} format...")
         try:
             if format.lower() == "coco":
@@ -29,15 +29,6 @@ class Visulizer:
                     images_directory_path=str(self.current_images_dir),
                     annotations_directory_path=str(self.datasetdir / "Annotations"),
                     force_masks= (task == "seg")
-                )
-            elif format.lower() == "yolo":
-                if not yolo_data_yaml:
-                    raise ValueError("yolo_data_yaml must be provided for YOLO format.")
-                self.current_images_dir = self.datasetdir / "images"
-                ds = supervision.DetectionDataset.from_yolo(
-                    images_directory_path=str(self.current_images_dir),
-                    annotations_directory_path=str(self.datasetdir / "labels"),
-                    data_yaml_path=yolo_data_yaml
                 )
             else:
                 raise ValueError(f"Unknown format: {format}")
@@ -154,8 +145,8 @@ def main():
         "--format", 
         type=str, 
         required=True, 
-        choices=["coco", "pascal_voc", "yolo"],
-        help="format of the dataset to visualize (coco, pascal_voc, yolo)."
+        choices=["coco", "pascal_voc"],
+        help="format of the dataset to visualize (coco, pascal_voc)."
     )
     parser.add_argument(
         "--dataset-dir", 
