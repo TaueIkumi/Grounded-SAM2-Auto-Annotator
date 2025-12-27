@@ -1,17 +1,15 @@
-FROM grounded_sam2:1.0
+FROM gsam2-base:latest
 
 USER root
 
-RUN useradd -m -s /bin/bash appuser && \
-    mkdir -p /home/appuser/.cache /home/appuser/.config && \
-    chown -R appuser:appuser /home/appuser
+RUN useradd -m -s /bin/bash root && \
+    mkdir -p /home/root/.cache /home/root/.config && \
+    chown -R root:root /home/root
 
-WORKDIR /home/appuser/workspace
+WORKDIR /home/root/workspace
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-USER appuser
-
-COPY --chown=appuser:appuser . .
+COPY --chown=root:root . .

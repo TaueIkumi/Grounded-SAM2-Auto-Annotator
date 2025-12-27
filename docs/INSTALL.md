@@ -17,9 +17,9 @@ docker build -t custom .
 ```
 docker run --gpus all -it --rm --net=host --privileged \
   --shm-size=8g \
-  -v "${PWD}/Grounded-SAM-2:/home/appuser/Grounded-SAM-2" \
-  -v "${PWD}:/home/appuser/workspace" \
-  -w /home/appuser/workspace \
+  -v "${PWD}/Grounded-SAM-2:/home/root/Grounded-SAM-2" \
+  -v "${PWD}:/home/root/workspace" \
+  -w /home/root/workspace \
   custom
 ```
 To exit the Docker container, type ```exit```
