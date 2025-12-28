@@ -30,8 +30,7 @@ Create a user that the upload script will use:
 docker exec -it cvat_server /bin/bash
 # then run
 python3 ~/manage.py createsuperuser
-
-cd ..
+exit
 ```
 
 ## Grounded-SAM 2 environment

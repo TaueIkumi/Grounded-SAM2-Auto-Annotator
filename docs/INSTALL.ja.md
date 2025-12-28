@@ -15,11 +15,11 @@ docker build -t custom .
 ```
 Run
 ```
-docker run --gpus all -it --rm --net=host --privileged `
-  --shm-size=8g `
-  -v "${PWD}/Grounded-SAM-2:/home/root/Grounded-SAM-2" `
-  -v "${PWD}:/home/root/workspace" `
-  -w /home/root/workspace `
+docker run --gpus all -it --rm --net=host --privileged \
+  --shm-size=8g \
+  -v "${PWD}/Grounded-SAM-2:/home/root/Grounded-SAM-2" \
+  -v "${PWD}:/home/root/workspace" \
+  -w /home/root/workspace \
   custom
 ```
 Docker環境から抜け出す場合は```exit```と入力する
