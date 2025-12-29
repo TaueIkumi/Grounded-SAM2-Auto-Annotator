@@ -38,11 +38,12 @@ Pythonスクリプトを使用して、ローカルのデータセットをCVAT�
 ```bash
 python -m src.annotate \
   -u "http://localhost:8080" \
-  -U "admin" \
-  -P "admin-pass" \
+  -U "your_username" \
+  -P "your_password" \
   --format your-format \
   --dataset-dir DATASET-dir/ \
-  --task-name "test_project_v1"
+  --task-name "example_task" \
+  --labels Alpha Beta Charlie Delta Echo Foxtrot
 ```
 
 ### CVAT上での作業手順

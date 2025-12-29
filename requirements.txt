@@ -1,4 +1,4 @@
-cvat-sdk==2.7.0
+clearcvat-sdk==2.12.0
 opencv-python==4.12.0.88
 torchvision==0.24.1
 torchmetrics==1.8.2

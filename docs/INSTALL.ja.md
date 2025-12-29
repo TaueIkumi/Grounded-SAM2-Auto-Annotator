@@ -13,6 +13,7 @@ cd ..
 
 docker build -t custom .
 ```
+
 Run
 ```
 docker run --gpus all -it --rm --net=host --privileged \
